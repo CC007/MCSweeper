@@ -19,4 +19,7 @@ public interface Field {
 
     void setState(int xPos, int yPos, int state);
 
+    public int getWidth();
+
+    public int getHeight();
 }

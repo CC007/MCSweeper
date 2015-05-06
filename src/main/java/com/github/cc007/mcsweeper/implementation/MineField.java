@@ -83,4 +83,12 @@ public class MineField implements Field {
         return returnStr;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
 }
