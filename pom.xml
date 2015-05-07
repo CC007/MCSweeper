@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.cc007</groupId>
     <artifactId>MCSweeperMaven</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,6 +31,15 @@
             <timezone>Europe/Amsterdam</timezone>
         </developer>
     </developers>
+    
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot-repo</id>
+        </snapshotRepository>
+    </distributionManagement>
     
     <dependencies>
         <dependency>
