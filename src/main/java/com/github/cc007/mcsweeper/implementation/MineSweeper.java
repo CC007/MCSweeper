@@ -47,7 +47,7 @@ public class MineSweeper implements Sweeper {
                 knownField.setState(xPos, yPos, Field.BOMB_STATE);
                 gameOver = true;
             } else if (hiddenField.getState(xPos, yPos) == Field.EMPTY_STATE) {
-                //TODO flood fill
+                //flood fill
                 knownField.setState(xPos, yPos, Field.EMPTY_STATE);
                 if (xPos - 1 >= 0) {
                     sweep(xPos - 1, yPos);
