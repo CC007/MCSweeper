@@ -26,6 +26,7 @@ package com.github.cc007.mcsweeper.implementation;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.cc007.mcsweeper.api.Field;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MineField implements Field {
@@ -119,7 +120,15 @@ public class MineField implements Field {
     @Override
     public JSONObject serialize() {
         JSONObject output = new JSONObject();
-        output.put("tiles", tiles);
+        JSONArray tilesJSON = new JSONArray();
+        for (List<Integer> tilesInner : tiles) {
+            JSONArray innerArray = new JSONArray();
+            for (Integer tile : tilesInner) {
+                innerArray.put(tile);
+            }
+            tilesJSON.put(innerArray);
+        }
+        output.put("tiles", tilesJSON);
         output.put("width", width);
         output.put("height", height);
         return output;
@@ -127,9 +136,18 @@ public class MineField implements Field {
 
     @Override
     public void deserialize(JSONObject input) {
+        tiles = new ArrayList<>();
+        JSONArray tilesJSON = input.getJSONArray("tiles");
+        for (int i = 0; i < tilesJSON.length(); i++) {
+            List<Integer> innerTiles = new ArrayList<>();
+            JSONArray tilesInnerJSON = tilesJSON.getJSONArray(i);
+            for (int j = 0; j < tilesInnerJSON.length(); j++) {
+                innerTiles.add(tilesInnerJSON.getInt(j));
+            }
+            tiles.add(innerTiles);
+        }
         width = input.getInt("width");
         height = input.getInt("height");
-        tiles = (List<List<Integer>>) input.get("tiles");
     }
 
 }

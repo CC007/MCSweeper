@@ -112,31 +112,5 @@ public class MineSweeperTest {
         Sweeper s2 = new MineSweeper(true);
         JSONObject serializedS1 = s1.serialize();
         s2.deserialize(serializedS1);
-        int x, y;
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                System.out.println(s1);
-                if (s1.hasLost()) {
-                    System.out.println("Game over!");
-                    break;
-                }
-                if (s1.hasWon()) {
-                    System.out.println("You won, congratz!");
-                    break;
-                }
-                System.out.println("Xpos: ");
-                x = Integer.parseInt(input.readLine());
-                if (x < 0) {
-                    System.out.println("Game ended");
-                    break;
-                }
-                System.out.println("Ypos: ");
-                y = Integer.parseInt(input.readLine());
-                s1.sweep(x, y);
-            } catch (IOException ex) {
-                Logger.getLogger(MineSweeperTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 }
