@@ -23,11 +23,15 @@
  */
 package com.github.cc007.mcsweeper.api;
 
+import java.io.InputStream;
+import java.io.Serializable;
+import org.json.JSONObject;
+
 /**
  *
  * @author Rik
  */
-public interface Field {
+public interface Field extends Serializable{
 
     public static final int UNKNOWN_STATE = -2;
     public static final int BOMB_STATE = -1;
@@ -40,4 +44,8 @@ public interface Field {
     public int getWidth();
 
     public int getHeight();
+    
+    public JSONObject serialize();
+    
+    public void deserialize(JSONObject input);
 }

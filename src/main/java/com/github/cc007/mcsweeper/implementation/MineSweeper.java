@@ -28,6 +28,12 @@ import java.util.List;
 import java.util.Random;
 import com.github.cc007.mcsweeper.api.Field;
 import com.github.cc007.mcsweeper.api.Sweeper;
+import java.io.InputStream;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONObject;
 
 public class MineSweeper implements Sweeper {
 
@@ -36,8 +42,17 @@ public class MineSweeper implements Sweeper {
     private int width;
     private int height;
     private int totalBombCount;
-    private boolean gameOver;
+    private boolean lost;
     private boolean won;
+
+    public MineSweeper(boolean emptyObject) {
+        if (!emptyObject) {
+            this.width = 9;
+            this.height = 9;
+            this.totalBombCount = 10;
+            resetField();
+        }
+    }
 
     public MineSweeper() {
         this(9);
@@ -55,6 +70,7 @@ public class MineSweeper implements Sweeper {
         this.width = width;
         this.height = height;
         this.totalBombCount = totalBombCount;
+        resetField();
     }
 
     @Override
@@ -63,7 +79,7 @@ public class MineSweeper implements Sweeper {
             System.out.println("A state will be changed at <" + xPos + "," + yPos + ">");
             if (hiddenField.getState(xPos, yPos) == Field.BOMB_STATE) {
                 knownField.setState(xPos, yPos, Field.BOMB_STATE);
-                gameOver = true;
+                lost = true;
             } else if (hiddenField.getState(xPos, yPos) == Field.EMPTY_STATE) {
                 //flood fill
                 knownField.setState(xPos, yPos, Field.EMPTY_STATE);
@@ -98,12 +114,12 @@ public class MineSweeper implements Sweeper {
         int currentPossibleBombCount = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(knownField.getState(i, j) == Field.UNKNOWN_STATE){
+                if (knownField.getState(i, j) == Field.UNKNOWN_STATE) {
                     currentPossibleBombCount++;
                 }
             }
         }
-        if(currentPossibleBombCount == totalBombCount){
+        if (currentPossibleBombCount == totalBombCount) {
             won = true;
         }
         return knownField;
@@ -116,7 +132,7 @@ public class MineSweeper implements Sweeper {
 
     @Override
     public final Field resetField() {
-        gameOver = false;
+        lost = false;
         won = false;
         knownField = new MineField(width, height);
         hiddenField = new MineField(width, height);
@@ -125,8 +141,8 @@ public class MineSweeper implements Sweeper {
     }
 
     @Override
-    public boolean isGameOver() {
-        return gameOver;
+    public boolean hasLost() {
+        return lost;
     }
 
     @Override
@@ -205,4 +221,29 @@ public class MineSweeper implements Sweeper {
         return knownField.toString();
     }
 
+    @Override
+    public JSONObject serialize() {
+        JSONObject output = new JSONObject();
+        output.put("knownField", knownField.serialize());
+        output.put("hiddenField", hiddenField.serialize());
+        output.put("width", width);
+        output.put("height", height);
+        output.put("totalBombCount", totalBombCount);
+        output.put("lost", lost);
+        output.put("won", won);
+        return output;
+    }
+
+    @Override
+    public void deserialize(JSONObject input) {
+        knownField = new MineField(true);
+        knownField.deserialize(input.getJSONObject("knownField"));
+        hiddenField = new MineField(true);
+        hiddenField.deserialize(input.getJSONObject("hiddenField"));
+        width = input.getInt("width");
+        height = input.getInt("height");
+        totalBombCount = input.getInt("totalBombCount");
+        lost = input.getBoolean("lost");
+        won = input.getBoolean("won");
+    }
 }

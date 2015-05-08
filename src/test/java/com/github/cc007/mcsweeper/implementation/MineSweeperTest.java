@@ -29,8 +29,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -64,7 +66,7 @@ public class MineSweeperTest {
     }
 
     /**
-     * Test of sweep method, of class MineSweeper.
+     * Test of the basic game.
      */
     @Test
     public void testGame() {
@@ -72,12 +74,11 @@ public class MineSweeperTest {
         System.setIn(new ByteArrayInputStream(data.getBytes()));
         Sweeper s = new MineSweeper(8, 10, 3);
         int x, y;
-        s.resetField();
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
                 System.out.println(s);
-                if (s.isGameOver()) {
+                if (s.hasLost()) {
                     System.out.println("Game over!");
                     break;
                 }
@@ -94,6 +95,45 @@ public class MineSweeperTest {
                 System.out.println("Ypos: ");
                 y = Integer.parseInt(input.readLine());
                 s.sweep(x, y);
+            } catch (IOException ex) {
+                Logger.getLogger(MineSweeperTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Test of the basic game.
+     */
+    @Test
+    public void testSerialization() {
+        String data = "0\n0\n-1\n";
+        System.setIn(new ByteArrayInputStream(data.getBytes()));
+        Sweeper s1 = new MineSweeper(8, 10, 3);
+        Sweeper s2 = new MineSweeper(true);
+        JSONObject serializedS1 = s1.serialize();
+        s2.deserialize(serializedS1);
+        int x, y;
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            try {
+                System.out.println(s1);
+                if (s1.hasLost()) {
+                    System.out.println("Game over!");
+                    break;
+                }
+                if (s1.hasWon()) {
+                    System.out.println("You won, congratz!");
+                    break;
+                }
+                System.out.println("Xpos: ");
+                x = Integer.parseInt(input.readLine());
+                if (x < 0) {
+                    System.out.println("Game ended");
+                    break;
+                }
+                System.out.println("Ypos: ");
+                y = Integer.parseInt(input.readLine());
+                s1.sweep(x, y);
             } catch (IOException ex) {
                 Logger.getLogger(MineSweeperTest.class.getName()).log(Level.SEVERE, null, ex);
             }

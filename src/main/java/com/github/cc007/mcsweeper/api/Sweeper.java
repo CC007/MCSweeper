@@ -23,19 +23,27 @@
  */
 package com.github.cc007.mcsweeper.api;
 
+import java.io.InputStream;
+import java.io.Serializable;
+import org.json.JSONObject;
+
 /**
  *
  * @author Rik
  */
-public interface Sweeper {
+public interface Sweeper extends Serializable {
 
     public Field sweep(int xPos, int yPos);
-    
+
     public Field getField();
-    
+
     public Field resetField();
-    
-    public boolean isGameOver();
-    
+
+    public boolean hasLost();
+
     public boolean hasWon();
+
+    public JSONObject serialize();
+    
+    public void deserialize(JSONObject input);
 }

@@ -26,6 +26,7 @@ package com.github.cc007.mcsweeper.implementation;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.cc007.mcsweeper.api.Field;
+import org.json.JSONObject;
 
 public class MineField implements Field {
 
@@ -33,14 +34,18 @@ public class MineField implements Field {
     private int width = 9;
     private int height = 9;
 
+    public MineField(boolean emptyObject) {
+        if (!emptyObject) {
+            init();
+        }
+    }
+
     public MineField() {
         init();
     }
 
     public MineField(int size) {
-        this.width = size;
-        this.height = size;
-        init();
+        this(size, size);
     }
 
     public MineField(int width, int height) {
@@ -101,12 +106,30 @@ public class MineField implements Field {
         return returnStr;
     }
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject output = new JSONObject();
+        output.put("tiles", tiles);
+        output.put("width", width);
+        output.put("height", height);
+        return output;
+    }
+
+    @Override
+    public void deserialize(JSONObject input) {
+        width = input.getInt("width");
+        height = input.getInt("height");
+        tiles = (List<List<Integer>>) input.get("tiles");
     }
 
 }
