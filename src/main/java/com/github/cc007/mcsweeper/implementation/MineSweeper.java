@@ -76,7 +76,7 @@ public class MineSweeper implements Sweeper {
     @Override
     public Field sweep(int xPos, int yPos) {
         if (knownField.getState(xPos, yPos) == Field.UNKNOWN_STATE) {
-            System.out.println("A state will be changed at <" + xPos + "," + yPos + ">");
+            //System.out.println("A state will be changed at <" + xPos + "," + yPos + ">");
             if (hiddenField.getState(xPos, yPos) == Field.BOMB_STATE) {
                 knownField.setState(xPos, yPos, Field.BOMB_STATE);
                 showBombs();
