@@ -128,9 +128,9 @@ public class MineSweeper implements Sweeper {
 
     @Override
     public Field flag(int xPos, int yPos) {
-        if (knownField.getState(xPos, yPos) <= Field.UNKNOWN_STATE) {
+        if (knownField.getState(xPos, yPos) == Field.UNKNOWN_STATE) {
             knownField.setState(xPos, yPos, Field.FLAG_STATE);
-        } else if (knownField.getState(xPos, yPos) <= Field.FLAG_STATE) {
+        } else if (knownField.getState(xPos, yPos) == Field.FLAG_STATE) {
             knownField.setState(xPos, yPos, Field.UNKNOWN_STATE);
         }
         return knownField;
