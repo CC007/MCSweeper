@@ -237,6 +237,16 @@ public class MineSweeper implements Sweeper {
         }
     }
 
+    private void showFlags() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (hiddenField.getState(i, j) == Field.BOMB_STATE) {
+                    knownField.setState(i, j, Field.FLAG_STATE);
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return knownField.toString();
