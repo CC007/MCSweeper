@@ -35,6 +35,8 @@ public interface Sweeper extends Serializable {
 
     public Field sweep(int xPos, int yPos);
 
+    public Field flag(int xPos, int yPos);
+
     public Field getField();
 
     public Field resetField();
@@ -44,6 +46,6 @@ public interface Sweeper extends Serializable {
     public boolean hasWon();
 
     public JSONObject serialize();
-    
+
     public void deserialize(JSONObject input);
 }

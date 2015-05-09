@@ -33,6 +33,7 @@ import org.json.JSONObject;
  */
 public interface Field extends Serializable{
 
+    public static final int FLAG_STATE = -3;
     public static final int UNKNOWN_STATE = -2;
     public static final int BOMB_STATE = -1;
     public static final int EMPTY_STATE = 0;

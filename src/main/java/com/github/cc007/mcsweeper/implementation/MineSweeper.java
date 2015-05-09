@@ -75,10 +75,11 @@ public class MineSweeper implements Sweeper {
 
     @Override
     public Field sweep(int xPos, int yPos) {
-        if (knownField.getState(xPos, yPos) <= Field.UNKNOWN_STATE) {
+        if (knownField.getState(xPos, yPos) == Field.UNKNOWN_STATE) {
             System.out.println("A state will be changed at <" + xPos + "," + yPos + ">");
             if (hiddenField.getState(xPos, yPos) == Field.BOMB_STATE) {
                 knownField.setState(xPos, yPos, Field.BOMB_STATE);
+                showBombs();
                 lost = true;
             } else if (hiddenField.getState(xPos, yPos) == Field.EMPTY_STATE) {
                 //flood fill
@@ -114,13 +115,23 @@ public class MineSweeper implements Sweeper {
         int currentPossibleBombCount = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (knownField.getState(i, j) == Field.UNKNOWN_STATE) {
+                if (knownField.getState(i, j) == Field.UNKNOWN_STATE || knownField.getState(i, j) == Field.FLAG_STATE) {
                     currentPossibleBombCount++;
                 }
             }
         }
         if (currentPossibleBombCount == totalBombCount) {
             won = true;
+        }
+        return knownField;
+    }
+
+    @Override
+    public Field flag(int xPos, int yPos) {
+        if (knownField.getState(xPos, yPos) <= Field.UNKNOWN_STATE) {
+            knownField.setState(xPos, yPos, Field.FLAG_STATE);
+        } else if (knownField.getState(xPos, yPos) <= Field.FLAG_STATE) {
+            knownField.setState(xPos, yPos, Field.UNKNOWN_STATE);
         }
         return knownField;
     }
@@ -214,6 +225,16 @@ public class MineSweeper implements Sweeper {
             }
         }
         return bombNrs;
+    }
+
+    private void showBombs() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (hiddenField.getState(i, j) == Field.BOMB_STATE) {
+                    knownField.setState(i, j, Field.BOMB_STATE);
+                }
+            }
+        }
     }
 
     @Override
