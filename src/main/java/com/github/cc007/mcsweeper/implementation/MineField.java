@@ -26,8 +26,9 @@ package com.github.cc007.mcsweeper.implementation;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.cc007.mcsweeper.api.Field;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class MineField implements Field {
 
@@ -118,36 +119,44 @@ public class MineField implements Field {
     }
 
     @Override
-    public JSONObject serialize() {
-        JSONObject output = new JSONObject();
-        JSONArray tilesJSON = new JSONArray();
+    public JsonObject serialize() {
+        JsonObject output = new JsonObject();
+        JsonArray tilesJSON = new JsonArray();
         for (List<Integer> tilesInner : tiles) {
-            JSONArray innerArray = new JSONArray();
+            
+            JsonArray innerArray = new JsonArray();
             for (Integer tile : tilesInner) {
-                innerArray.put(tile);
+                innerArray.add(new JsonPrimitive(tile));
             }
-            tilesJSON.put(innerArray);
+            
+            tilesJSON.add(innerArray);
         }
-        output.put("tiles", tilesJSON);
-        output.put("width", width);
-        output.put("height", height);
+        output.add("tiles", tilesJSON);
+        output.addProperty("width", width);
+        output.addProperty("height", height);
         return output;
     }
 
     @Override
-    public void deserialize(JSONObject input) {
+    public void deserialize(JsonObject input) {
+        
         tiles = new ArrayList<>();
-        JSONArray tilesJSON = input.getJSONArray("tiles");
-        for (int i = 0; i < tilesJSON.length(); i++) {
+        JsonArray tilesJSON = input.get("tiles").getAsJsonArray();
+        
+        for (int i = 0; i < tilesJSON.size(); i++) {
+            
             List<Integer> innerTiles = new ArrayList<>();
-            JSONArray tilesInnerJSON = tilesJSON.getJSONArray(i);
-            for (int j = 0; j < tilesInnerJSON.length(); j++) {
-                innerTiles.add(tilesInnerJSON.getInt(j));
+            JsonArray tilesInnerJSON = tilesJSON.get(i).getAsJsonArray();
+            
+            for (int j = 0; j < tilesInnerJSON.size(); j++) {
+                innerTiles.add(tilesInnerJSON.get(j).getAsJsonPrimitive().getAsInt());
             }
+            
             tiles.add(innerTiles);
         }
-        width = input.getInt("width");
-        height = input.getInt("height");
+        
+        width = input.get("width").getAsInt();
+        height = input.get("height").getAsInt();
     }
 
 }

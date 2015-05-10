@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.cc007</groupId>
   <artifactId>MCSweeper</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.3</version>
   <developers>
     <developer>
       <id>cc007</id>
@@ -79,6 +79,7 @@
                 <excludes>
                   <exclude>junit:junit</exclude>
                   <exclude>org.hamcrest:hamcrest-core</exclude>
+                  <exclude>org.json:json</exclude>
                 </excludes>
               </artifactSet>
             </configuration>
