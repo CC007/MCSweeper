@@ -23,9 +23,8 @@
  */
 package com.github.cc007.mcsweeper.api;
 
-import java.io.InputStream;
+import com.google.gson.JsonObject;
 import java.io.Serializable;
-import org.json.JSONObject;
 
 /**
  *
@@ -46,7 +45,7 @@ public interface Field extends Serializable{
 
     public int getHeight();
     
-    public JSONObject serialize();
+    public JsonObject serialize();
     
-    public void deserialize(JSONObject input);
+    public void deserialize(JsonObject input);
 }

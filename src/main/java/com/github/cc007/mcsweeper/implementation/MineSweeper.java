@@ -28,12 +28,7 @@ import java.util.List;
 import java.util.Random;
 import com.github.cc007.mcsweeper.api.Field;
 import com.github.cc007.mcsweeper.api.Sweeper;
-import java.io.InputStream;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 public class MineSweeper implements Sweeper {
 
@@ -253,28 +248,28 @@ public class MineSweeper implements Sweeper {
     }
 
     @Override
-    public JSONObject serialize() {
-        JSONObject output = new JSONObject();
-        output.put("knownField", knownField.serialize());
-        output.put("hiddenField", hiddenField.serialize());
-        output.put("width", width);
-        output.put("height", height);
-        output.put("totalBombCount", totalBombCount);
-        output.put("lost", lost);
-        output.put("won", won);
+    public JsonObject serialize() {
+        JsonObject output = new JsonObject();
+        output.add("knownField", knownField.serialize());
+        output.add("hiddenField", hiddenField.serialize());
+        output.addProperty("width", width);
+        output.addProperty("height", height);
+        output.addProperty("totalBombCount", totalBombCount);
+        output.addProperty("lost", lost);
+        output.addProperty("won", won);
         return output;
     }
 
     @Override
-    public void deserialize(JSONObject input) {
+    public void deserialize(JsonObject input) {
         knownField = new MineField(true);
-        knownField.deserialize(input.getJSONObject("knownField"));
+        knownField.deserialize(input.getAsJsonObject("knownField"));
         hiddenField = new MineField(true);
-        hiddenField.deserialize(input.getJSONObject("hiddenField"));
-        width = input.getInt("width");
-        height = input.getInt("height");
-        totalBombCount = input.getInt("totalBombCount");
-        lost = input.getBoolean("lost");
-        won = input.getBoolean("won");
+        hiddenField.deserialize(input.getAsJsonObject("hiddenField"));
+        width = input.getAsJsonPrimitive("width").getAsInt();
+        height = input.getAsJsonPrimitive("height").getAsInt();
+        totalBombCount = input.getAsJsonPrimitive("totalBombCount").getAsInt();
+        lost = input.getAsJsonPrimitive("lost").getAsBoolean();
+        won = input.getAsJsonPrimitive("won").getAsBoolean();
     }
 }

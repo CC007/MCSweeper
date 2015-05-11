@@ -25,6 +25,7 @@ package com.github.cc007.mcsweeper.implementation;
 
 import com.github.cc007.mcsweeper.api.Field;
 import com.github.cc007.mcsweeper.api.Sweeper;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,7 +33,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -110,7 +110,7 @@ public class MineSweeperTest {
         System.setIn(new ByteArrayInputStream(data.getBytes()));
         Sweeper s1 = new MineSweeper(8, 10, 3);
         Sweeper s2 = new MineSweeper(true);
-        JSONObject serializedS1 = s1.serialize();
+        JsonObject serializedS1 = s1.serialize();
         s2.deserialize(serializedS1);
     }
 }
