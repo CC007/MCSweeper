@@ -29,6 +29,7 @@ import java.util.Random;
 import com.github.cc007.mcsweeper.api.Field;
 import com.github.cc007.mcsweeper.api.Sweeper;
 import com.google.gson.JsonObject;
+import java.util.Collections;
 
 public class MineSweeper implements Sweeper {
 
@@ -64,7 +65,7 @@ public class MineSweeper implements Sweeper {
     public MineSweeper(int width, int height, int totalBombCount) {
         this.width = width;
         this.height = height;
-        this.totalBombCount = totalBombCount;
+        this.totalBombCount = totalBombCount < width * height ? totalBombCount : width * height;
         resetField();
     }
 
@@ -205,19 +206,15 @@ public class MineSweeper implements Sweeper {
         List<Integer> bombNrs = new ArrayList();
         Random r = new Random(System.nanoTime());
         for (int i = 0; i < totalBombCount; i++) {
-            int temp = r.nextInt(width * height);
-            boolean flag = false;
+            int temp = r.nextInt(width * height - i);
             for (Integer bombNr : bombNrs) {
-                if (bombNr == temp) {
-                    flag = true;
+                if (bombNr > temp) {
                     break;
                 }
+                temp++;
             }
-            if (flag) {
-                i--;
-            } else {
-                bombNrs.add(temp);
-            }
+            bombNrs.add(temp);
+            Collections.sort(bombNrs);
         }
         return bombNrs;
     }
